@@ -11,18 +11,28 @@ void get_data() {
         return;
     }
     string name, surname, film;
-    while(in >> name >> surname >> film)
+    while(getline(in, name)) {
+        getline(in, surname);
+        getline(in, film);
         cout << name << " " << surname << " " << film << "\n";
+    }
     in.close();
 }
 
 int main() {
-	string name, surname, film;
-	cin >> name >> surname >> film;
-	ofstream out("results.txt", ios_base::app);
-	if (!out)
-        return 1;
-	out << name << " " << surname << " " << film << "\n";
-	out.close();
+    string s;
+    cout << "Type 'poll' if you want to take a poll or 'data' to get data\n";
+    cin >> s;
+    if (s == "poll"){
+        string name, surname, film;
+        cin >> name >> surname >> film;
+        ofstream out("results.txt", ios_base::app);
+        if (!out)
+            return 1;
+        out << name << "\n" << surname << "\n" << film << "\n";
+        out.close();
+    }
+    if (s == "data")
+        get_data();
 	return 0;
 }
