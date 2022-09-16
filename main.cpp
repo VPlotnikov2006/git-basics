@@ -4,6 +4,18 @@
 
 using namespace std;
 
+void get_data() {
+    ifstream in("results.txt");
+    if (!in) {
+        cout << "No saved data";
+        return;
+    }
+    string name, surname, film;
+    while(in >> name >> surname >> film)
+        cout << name << " " << surname << " " << film << "\n";
+    in.close();
+}
+
 int main() {
 	string name, surname, film;
 	cin >> name >> surname >> film;
