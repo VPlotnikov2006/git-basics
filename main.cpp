@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
+#include <Windows.h>
 
 using namespace std;
 
@@ -24,6 +26,7 @@ string trim(const string &s) {
 }
 
 void get_data() {
+    map<string, int> answers;
     ifstream q("inputfile");
     if(!q)
         return ;
@@ -39,7 +42,7 @@ void get_data() {
     }
     int user = 1;
     cout << "User" << "\t\t| ";
-    for (int i = 0; i < num; i++) cout << "Question №" << i+1 << "\t\t| ";
+    for (int i = 0; i < num; i++) cout << "Question " << i+1 << "\t\t| ";
     cout << "\n";
     while(getline(in,ans)) {
         ans = trim(ans);
@@ -56,9 +59,19 @@ void get_data() {
                 cout << " ";
             cout << "| ";
         }
+        answers[ans]++;
         cout << "\n";
         user++;
     }
+    int Max = -1;
+    for (auto x: answers) {
+        if (x.second > Max) {
+            Max = x.second;
+            ans = x.first;
+        }
+    }
+    cout << "Users number: " << user-1 << "\n";
+    cout << "Most popular answer: " << ans;
     in.close();
 }
 
