@@ -38,13 +38,23 @@ void get_data() {
         return;
     }
     int user = 1;
+    cout << "User" << "\t\t| ";
+    for (int i = 0; i < num; i++) cout << "Question №" << i+1 << "\t\t| ";
+    cout << "\n";
     while(getline(in,ans)) {
         ans = trim(ans);
-        cout <<"User: " << user << "\t| " << ans << "\t| ";
+        cout << user << "\t\t| ";
+        cout << ans;
+        for (int i = ans.size(); i < 22; i++)
+            cout << " ";
+        cout << "| ";
         for (int i = 1; i < num; i++){
             getline(in, ans);
             ans = trim(ans);
-            cout << ans << "\t| ";
+            cout << ans;
+            for (int i = ans.size(); i < 22; i++)
+                cout << " ";
+            cout << "| ";
         }
         cout << "\n";
         user++;
