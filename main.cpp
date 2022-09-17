@@ -5,17 +5,49 @@
 
 using namespace std;
 
+const string WHITESPACE = " \n\r\t\f\v";
+
+string ltrim(const string &s)
+{
+    size_t start = s.find_first_not_of(WHITESPACE);
+    return (start == string::npos) ? "" : s.substr(start);
+}
+
+string rtrim(const string &s)
+{
+    size_t end = s.find_last_not_of(WHITESPACE);
+    return (end == string::npos) ? "" : s.substr(0, end + 1);
+}
+
+string trim(const string &s) {
+    return rtrim(ltrim(s));
+}
+
 void get_data() {
+    ifstream q("inputfile");
+    if(!q)
+        return ;
+    string question;
+    int num = 0;
+    string ans;
+    while(getline(q, question)) num++;
+    q.close();
     ifstream in("results.txt");
     if (!in) {
         cout << "No saved data";
         return;
     }
-    string name, surname, film;
-    while(getline(in, name)) {
-        getline(in, surname);
-        getline(in, film);
-        cout << name << " " << surname << " " << film << "\n";
+    int user = 1;
+    while(getline(in,ans)) {
+        ans = trim(ans);
+        cout <<"User: " << user << "\t| " << ans << "\t| ";
+        for (int i = 1; i < num; i++){
+            getline(in, ans);
+            ans = trim(ans);
+            cout << ans << "\t| ";
+        }
+        cout << "\n";
+        user++;
     }
     in.close();
 }
