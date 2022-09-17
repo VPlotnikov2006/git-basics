@@ -25,7 +25,7 @@ string trim(const string &s) {
     return rtrim(ltrim(s));
 }
 
-void get_data() {
+void get_data(size_t width = 200, size_t height = 100) {
     map<string, int> answers;
     ifstream q("inputfile");
     if(!q)
@@ -41,27 +41,44 @@ void get_data() {
         return;
     }
     int user = 1;
-    cout << "User" << "\t\t| ";
-    for (int i = 0; i < num; i++) cout << "Question " << i+1 << "\t\t| ";
-    cout << "\n";
+    string output = "";
+
+    output += string("User") + string("            | ");
+    for (int i = 0; i < num; i++) {output += string("Question ") + char(i+1+'0') + string("\t\t| ");   }
+    if (output.size() >= width)  {
+        output = output.substr(0, width - 3) + string("...");
+    }
+    cout << output << "\n";
     while(getline(in,ans)) {
+        if (user >= height)
+            break;
         ans = trim(ans);
-        cout << user << "\t\t| ";
-        cout << ans;
+        output = "";
+        output+= char(user + '0') + string("             ");
+        if (user < 100)
+            output += string(" ");
+        if (user < 10)
+            output += string(" ");
+        output += string("| ");
+        output += ans;
         for (int i = ans.size(); i < 22; i++)
-            cout << " ";
-        cout << "| ";
+            output += string(" ");
+        output += string("| ");
         for (int i = 1; i < num; i++){
             getline(in, ans);
             ans = trim(ans);
-            cout << ans;
-            for (int i = ans.size(); i < 22; i++)
-                cout << " ";
-            cout << "| ";
+            output += ans;
+            for (int j = ans.size(); j < 22; j++)
+                output+=string(" ");
+            output+= string("| ");
+        }
+        if (output.size() >= width) {
+            output = output.substr(0, width-3) + string("...");
         }
         answers[ans]++;
-        cout << "\n";
+        cout << output <<"\n";
         user++;
+
     }
     int Max = -1;
     for (auto x: answers) {
@@ -71,7 +88,8 @@ void get_data() {
         }
     }
     cout << "Users number: " << user-1 << "\n";
-    cout << "Most popular answer: " << ans;
+    if (user-1 != 0)
+        cout << "Most popular answer: " << ans;
     in.close();
 }
 
