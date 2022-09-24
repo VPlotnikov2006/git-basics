@@ -26,7 +26,7 @@ string trim(const string &s) {
     return rtrim(ltrim(s));
 }
 
-void get_data(size_t width = 200, size_t height = 100) {
+void get_data() {
     map<string, int> answers;
     ifstream q("inputfile");
     if(!q)
@@ -42,44 +42,27 @@ void get_data(size_t width = 200, size_t height = 100) {
         return;
     }
     int user = 1;
-    string output = "";
-
-    output += string("User") + string("            | ");
-    for (int i = 0; i < num; i++) {output += string("Question ") + char(i+1+'0') + string("\t\t| ");   }
-    if (output.size() >= width)  {
-        output = output.substr(0, width - 3) + string("...");
-    }
-    cout << output << "\n";
+    cout << "User" << "\t\t| ";
+    for (int i = 0; i < num; i++) cout << "Question " << i+1 << "\t\t| ";
+    cout << "\n";
     while(getline(in,ans)) {
-        if (user >= height)
-            break;
         ans = trim(ans);
-        output = "";
-        output+= char(user + '0') + string("             ");
-        if (user < 100)
-            output += string(" ");
-        if (user < 10)
-            output += string(" ");
-        output += string("| ");
-        output += ans;
+        cout << user << "\t\t| ";
+        cout << ans;
         for (int i = ans.size(); i < 22; i++)
-            output += string(" ");
-        output += string("| ");
+            cout << " ";
+        cout << "| ";
         for (int i = 1; i < num; i++){
             getline(in, ans);
             ans = trim(ans);
-            output += ans;
-            for (int j = ans.size(); j < 22; j++)
-                output+=string(" ");
-            output+= string("| ");
-        }
-        if (output.size() >= width) {
-            output = output.substr(0, width-3) + string("...");
+            cout << ans;
+            for (int i = ans.size(); i < 22; i++)
+                cout << " ";
+            cout << "| ";
         }
         answers[ans]++;
-        cout << output <<"\n";
+        cout << "\n";
         user++;
-
     }
     int Max = -1;
     for (auto x: answers) {
@@ -89,8 +72,7 @@ void get_data(size_t width = 200, size_t height = 100) {
         }
     }
     cout << "Users number: " << user-1 << "\n";
-    if (user-1 != 0)
-        cout << "Most popular answer: " << ans;
+    cout << "Most popular answer: " << ans;
     in.close();
 }
 
