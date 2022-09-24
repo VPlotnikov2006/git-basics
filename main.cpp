@@ -3,26 +3,41 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <Windows.h>
 
 using namespace std;
 
 const string WHITESPACE = " \n\r\t\f\v";
+string ltrim(const string &s);
+string rtrim(const string &s);
+string trim(const string &s);
+void get_data(); //prints information to the console
 
-string ltrim(const string &s)
-{
-    size_t start = s.find_first_not_of(WHITESPACE);
-    return (start == string::npos) ? "" : s.substr(start);
-}
-
-string rtrim(const string &s)
-{
-    size_t end = s.find_last_not_of(WHITESPACE);
-    return (end == string::npos) ? "" : s.substr(0, end + 1);
-}
-
-string trim(const string &s) {
-    return rtrim(ltrim(s));
+int main() {
+    string action;
+    cout << "Type 'poll' if you want to take a poll or 'data' to get data\n";
+    getline(cin, action);
+    if (action == "poll"){
+        vector<string> answers;
+        ifstream questions("inputfile");
+        if(!questions)
+            return 2;
+        string question;
+        while (getline(questions, question)) {
+            cout << question << "\n";
+            string ans;
+            getline(cin, ans);
+            answers.push_back(ans);
+        }
+        ofstream out("results.txt", ios_base::app);
+        if (!out)
+            return 1;
+        for (auto x: answers)
+            out << x << "\n";
+        out.close();
+    }
+    if (action == "data")
+        get_data();
+	return 0;
 }
 
 void get_data() {
@@ -55,7 +70,7 @@ void get_data() {
             getline(in, ans);
             ans = trim(ans);
             cout << ans;
-            for (int i = ans.size(); i < 22; i++)
+            for (int j = ans.size(); j < 22; j++)
                 cout << " ";
             cout << "| ";
         }
@@ -75,30 +90,16 @@ void get_data() {
     in.close();
 }
 
-int main() {
-    string action;
-    cout << "Type 'poll' if you want to take a poll or 'data' to get data\n";
-    getline(cin, action);
-    if (action == "poll"){
-        vector<string> answers;
-        ifstream questions("inputfile");
-        if(!questions)
-            return 2;
-        string question;
-        while (getline(questions, question)) {
-            cout << question << "\n";
-            string ans;
-            getline(cin, ans);
-            answers.push_back(ans);
-        }
-        ofstream out("results.txt", ios_base::app);
-        if (!out)
-            return 1;
-        for (auto x: answers)
-            out << x << "\n";
-        out.close();
-    }
-    if (action == "data")
-        get_data();
-	return 0;
+string ltrim(const string &s) {
+    size_t start = s.find_first_not_of(WHITESPACE);
+    return (start == string::npos) ? "" : s.substr(start);
+}
+
+string rtrim(const string &s) {
+    size_t end = s.find_last_not_of(WHITESPACE);
+    return (end == string::npos) ? "" : s.substr(0, end + 1);
+}
+
+string trim(const string &s) {
+    return rtrim(ltrim(s));
 }
