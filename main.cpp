@@ -1,4 +1,4 @@
-/*VladimirP email-@*/
+/*VladimirP*/
 #include <iostream>
 #include <fstream>
 #include <string>
