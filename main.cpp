@@ -12,13 +12,19 @@ string rtrim(const string &s);
 string trim(const string &s);
 void get_data(); //prints information to the console
 
+string questions_filename = "inputfile";
+string results_filename = "results.txt";
+
 int main() {
     string action;
-    cout << "Type 'poll' if you want to take a poll or 'data' to get data\n";
+    cout << "Type: \n"
+      << "  - 'poll' if you want to take a poll, \n" 
+      << "  - 'data' to get data, \n" 
+      << "  - 'questions' to edit questions \n";
     getline(cin, action);
     if (action == "poll"){
         vector<string> answers;
-        ifstream questions("inputfile");
+        ifstream questions(questions_filename);
         if(!questions)
             return 2;
         string question;
@@ -28,21 +34,45 @@ int main() {
             getline(cin, ans);
             answers.push_back(ans);
         }
-        ofstream out("results.txt", ios_base::app);
+        ofstream out(results_filename, ios_base::app);
         if (!out)
             return 1;
         for (auto x: answers)
             out << x << "\n";
         out.close();
     }
-    if (action == "data")
-        get_data();
-	return 0;
+    else if (action == "data") {
+      get_data();
+    }
+    else if (action == "questions") {
+      cout << "Enter new questions, when ready, type 'end' \n";
+      int q_i = 1;
+      cout << "Q" << q_i << ": ";
+      string question;
+      getline(cin, question);
+      question = trim(question);
+      ofstream questions_file(questions_filename);
+      while (question != "end") {
+          questions_file << question << "\n";
+          q_i++;
+          cout << "Q" << q_i << ": ";
+          getline(cin, question);
+          question = trim(question);
+      }
+      questions_file.close();
+      ofstream answers_file(results_filename);
+      answers_file.close();
+    }
+    else {
+      cout << "unknown option \n";
+      return 3;
+    }
+	  return 0;
 }
 
 void get_data() {
     map<string, int> answers;
-    ifstream q("inputfile");
+    ifstream q(questions_filename);
     if(!q)
         return ;
     string question;
@@ -50,7 +80,7 @@ void get_data() {
     string ans;
     while(getline(q, question)) num++;
     q.close();
-    ifstream in("results.txt");
+    ifstream in(results_filename);
     if (!in) {
         cout << "No saved data";
         return;
